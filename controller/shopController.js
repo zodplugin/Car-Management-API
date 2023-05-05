@@ -102,6 +102,13 @@ async function createShop(req, res) {
     try {
         const { name, city } = req.body
         const userId = req.user.id
+        if (!name && !city && !userId){
+            console.log(city)
+            res.status(401).json({
+                status: 'failed',
+                message: "Data tidak lengkap"
+            })
+        }
         const newShop = await shops.create({
             name,
             city,
