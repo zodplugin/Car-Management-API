@@ -86,6 +86,23 @@ async function deleteUser(req, res) {
 async function createUser(req, res) {
     try {
         const { username, password } = req.body
+        
+
+        const checkRequired = req.body.username && req.body.password ? true : false
+        const checkPassword = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
+        const checkUsername = users.findIndex((e) => e.name)
+        console.log(checkRequired)
+        if (!checkRequired){
+            res.status(400).json({
+                status: 'failed',
+                message: "Data tidak lengkap"
+            })
+        }else if (!password.match(checkPassword)){
+            res.status(400).json({
+                status: 'failed',
+                message: "Password tidak sesuai harap terdapat 1 digit, 1 lowercase , 1 uppercase dan dengan panjang 6-10"
+            })
+        }
 
         const hashPassword = bcrypt.hashSync(password, 10)
         const newUser = await users.create({

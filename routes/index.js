@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const User = require('./users')
 const Product = require('./products')
-const ProductAdmin = require('./productadmin')
+const Dashboardx = require('./dashboard')
 const Shop = require('./shops')
 const Home = require('./home')
 const swaggerUi = require('swagger-ui-express')
@@ -19,7 +19,7 @@ router.use('/api-docs', swaggerUi.setup(swaggerDocument))
 
 // API
 // product
-router.use(ProductAdmin)
+router.use(Dashboardx)
 router.use(Home)
 // jadi kita bikin API products ini :
 // 1. get bisa diakses oleh semua role
