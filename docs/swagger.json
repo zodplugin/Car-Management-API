@@ -11,8 +11,12 @@
             "description": "This is API for managing CRUD SHOPS"
         },
         {
-            "name": "Shops",
-            "description": "This is API for managing CRUD SHOPS"
+            "name": "Users",
+            "description": "This is API for managing CRUD Users"
+        },
+        {
+            "name": "Products",
+            "description": "This is API for managing CRUD Products"
         }
     ],
     "servers": [
@@ -132,7 +136,7 @@
                 "tags": [
                     "Users"
                 ],
-                "summary": "Returns a list of shops.",
+                "summary": "Returns a list of users.",
                 "description": "This is API for get all user data",
                 "responses": {
                     "200": {
@@ -145,14 +149,14 @@
                     "Users"
                 ],
                 "summary": "Success creaete shop",
-                "description": "This is API for create new shop",
+                "description": "This is API for create new users",
                 "security": [
                     {
                         "bearerToken": []
                     }
                 ],
                 "requestBody": {
-                    "description": "Success create new shop",
+                    "description": "Success create new users",
                     "required": true,
                     "content": {
                         "application/json": {
@@ -178,6 +182,112 @@
                 },
                 "responses": {
                     "201": {
+                        "description": "Success create new users",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "Success"
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "username": {
+                                                    "type": "string",
+                                                    "example": "admin"
+                                                },
+                                                "password": {
+                                                    "type": "string",
+                                                    "example": "123456"
+                                                },
+                                                "role": {
+                                                    "type": "string",
+                                                    "example": "admin"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Failed because username is empty",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "failed"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Failed because username empty"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/products": {
+            "get": {
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Returns a list of Products.",
+                "description": "This is API for get all Products data",
+                "responses": {
+                    "200": {
+                        "description": "Success get Products data"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Success creaete Products",
+                "description": "This is API for create new Products",
+                "security": [
+                    {
+                        "bearerToken": []
+                    }
+                ],
+                "requestBody": {
+                    "description": "Success create new Products",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "admin"
+                                    },
+                                    "price": {
+                                        "type": "integer",
+                                        "example": 12312
+                                    },
+                                    "stock": {
+                                        "type": "integer",
+                                        "example": 55
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
                         "description": "Success create new Shop",
                         "content": {
                             "application/json": {
@@ -193,15 +303,15 @@
                                             "properties": {
                                                 "name": {
                                                     "type": "string",
-                                                    "example": "toko imam"
+                                                    "example": "admin"
                                                 },
-                                                "city": {
-                                                    "type": "string",
-                                                    "example": "bandung"
-                                                },
-                                                "userId": {
+                                                "price": {
                                                     "type": "integer",
-                                                    "example": 1
+                                                    "example": 12312
+                                                },
+                                                "stock": {
+                                                    "type": "integer",
+                                                    "example": 55
                                                 }
                                             }
                                         }
@@ -241,15 +351,49 @@
                 "properties": {
                     "name": {
                         "type": "string",
-                        "example": "toko imam"
+                        "example": "toko asep"
                     },
                     "city": {
                         "type": "string",
-                        "example": "bandung"
+                        "example": "depok"
                     },
                     "userId": {
                         "type": "integer",
                         "example": 1
+                    }
+                }
+            },
+            "users": {
+                "type": "object",
+                "properties": {
+                    "username": {
+                        "type": "string",
+                        "example": "zeqeela"
+                    },
+                    "password": {
+                        "type": "string",
+                        "example": "Password123"
+                    },
+                    "role": {
+                        "type": "string",
+                        "example": "admin"
+                    }
+                }
+            },
+            "products": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "zeqeela"
+                    },
+                    "price": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "stock": {
+                        "type": "integer",
+                        "example": 4
                     }
                 }
             }
