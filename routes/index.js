@@ -25,7 +25,7 @@ router.use(Home)
 // 1. get bisa diakses oleh semua role
 // 2. create update hanya bisa diakses oleh admin dan superadmin
 // 3. dedlete hanya bisa diakses oleh superadmin
-router.use('/api/v1/products/',Authorization,Product)
+router.use('/api/v1/products/',Product)
 // users
 router.use('/api/v1/users/',User)
 

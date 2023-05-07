@@ -1,5 +1,5 @@
 // yang bantu upload file
-const imagekit = require('../lib/imagekit')
+const { imagekit } = require('../lib/imagekit')
 
 
 
@@ -67,26 +67,43 @@ async function getProductById(req, res) {
 
 async function editProduct(req, res) {
     try {
-        const { name } = req.body;
+        const { name,price,stock } = req.body;
         const id = req.params.id;
 
-        const data = await product.update({
-            name
-        }, {
-            where: { id }
-        })
-
-        if (!data){
+        const checkRequired = req.body.name && req.body.price && req.body.stock ? true : false
+        
+        if(!checkRequired){
             res.status(401).json({
                 status :"failed",
-                message: "data tidak ditemukan"
+                message: "data tidak lengkap"
             })
+        }else if(name.length < 3){
+            res.status(401).json({
+                status :"failed",
+                message: "data nama tidak sesuai pastikan panjangnya lebih dari 10"
+        })
+        }else{
+                const data = await product.update({
+                    name,
+                    price,
+                    stock
+                }, {
+                    where: { id }
+                })
+
+                if (!data){
+                    res.status(401).json({
+                        status :"failed",
+                        message: "data tidak ditemukan"
+                    })
+                }
+
+                res.status(200).json({
+                    status: 'success',
+                    message: `data dari id ${id} nya berhasil berubah`,
+                })
         }
 
-        res.status(200).json({
-            status: 'success',
-            message: `data dari id ${id} nya berhasil berubah`
-        })
     } catch (err) {
         res.status(400).json({
             status: 'failed',
@@ -98,48 +115,63 @@ async function editProduct(req, res) {
 async function deleteProduct(req, res) {
     try {
         const id = req.params.id
-        await product.destroy({
+        const data = await product.destroy({
             where: {
                 id
             }
         })
 
-        res.status(200).json({
-            'status': 'success',
-            'message': `data ${id} ini berhasil di hapus`
-        })
+        if (!data){
+            res.status(401).json({
+                status :"failed",
+                message: "data tidak ditemukan"
+            })
+        }else{
+            res.status(200).json({
+                'status': 'success',
+                'message': `data ${id} ini berhasil di hapus`
+            })
+        }
+
+       
     } catch (err) {
-        res.status(400).message(err.message)
+        res.status(400).json({
+            status: 'failed',
+            message: err.message
+        })
     }
 }
 
 async function createProduct(req, res) {
     try {
         const { name, price, stock } = req.body
-
-        if(!name && !price && !stock){
+        const checkRequired = req.body.name && req.body.price && req.body.stock ? true : false
+        
+        if(!checkRequired){
             res.status(401).json({
                 status :"failed",
                 message: "data tidak lengkap"
             })
-        }else if(name.length < 10){
+        }else if(name.length < 3){
             res.status(401).json({
                 status :"failed",
                 message: "data nama tidak sesuai pastikan panjangnya lebih dari 10"
             })
+        }else{
+            const newProduct = await product.create({
+                name,
+                price,
+                stock
+            })
+            res.status(201).json({
+                status: 'success',
+                data: {
+                    product: newProduct
+                }
+            })
         }
 
-        const newProduct = await product.create({
-            name,
-            price,
-            stock
-        })
-        res.status(201).json({
-            status: 'success',
-            data: {
-                product: newProduct
-            }
-        })
+        
     } catch (err) {
         res.status(400).json({
             status: 'failed',

@@ -61,17 +61,24 @@ async function editShop(req, res) {
     try {
         const { name } = req.body;
         const id = req.params.id;
-
-        await shops.update({
-            name
-        }, {
-            where: { id }
-        })
-
-        res.status(200).json({
-            status: 'success',
-            message: `data dari id ${id} nya berhasil berubah`
-        })
+        const checkRequired = name && city ? true : false
+        if (!checkRequired){
+            res.status(401).json({
+                status: 'failed',
+                message: "Data tidak lengkap"
+            })
+        }else{
+            await shops.update({
+                name
+            }, {
+                where: { id }
+            })
+    
+            res.status(200).json({
+                status: 'success',
+                message: `data dari id ${id} nya berhasil berubah`
+            })
+        }
     } catch (err) {
         res.status(400).json({
             status: 'failed',
@@ -94,32 +101,37 @@ async function deleteShop(req, res) {
             'message': `data ${id} ini berhasil di hapus`
         })
     } catch (err) {
-        res.status(400).message(err.message)
+        res.status(400).json({
+            status: 'failed',
+            message: err.message
+        })
     }
 }
 
 async function createShop(req, res) {
     try {
         const { name, city } = req.body
+        const checkRequired = name && city ? true : false
         const userId = req.user.id
-        if (!name && !city && !userId){
-            console.log(city)
+        if (!checkRequired){
             res.status(401).json({
                 status: 'failed',
                 message: "Data tidak lengkap"
             })
+        }else{
+            const newShop = await shops.create({
+                name,
+                city,
+                userId,
+            })
+            res.status(201).json({
+                status: 'success',
+                data: {
+                    shop: newShop
+                }
+            })
         }
-        const newShop = await shops.create({
-            name,
-            city,
-            userId,
-        })
-        res.status(201).json({
-            status: 'success',
-            data: {
-                shop: newShop
-            }
-        })
+       
     } catch (err) {
         res.status(400).json({
             status: 'failed',
